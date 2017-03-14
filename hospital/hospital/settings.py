@@ -15,6 +15,9 @@ SPIDER_MODULES = ['hospital.spiders']
 NEWSPIDER_MODULE = 'hospital.spiders'
 
 COOKIES_ENABLED = True
+COOKIES_DEBUG=True
+REDIRECT_ENABLED = False #关掉重定向,不会重定向到新的地址
+HTTPERROR_ALLOWED_CODES = [302] #返回302时,按正常返回对待,可以正常写入cookie
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'hospital (+http://www.yourdomain.com)'
 
@@ -64,9 +67,10 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'hospital.pipelines.HospitalPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'hospital.pipelines.HospitalPipeline': 300
+   #  'hospital.pipelines.DoctorPipeline':800
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html

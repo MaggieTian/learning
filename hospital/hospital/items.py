@@ -18,11 +18,23 @@ class HospitalItem(scrapy.Item):
 class DoctorItem(scrapy.Item):
 
     docName = scrapy.Field()
-    docSex = scrapy.Field()
     docTitle = scrapy.Field()
-    docDes = scrapy.Field()
-    docDcore = scrapy.Field()
+    docDec = scrapy.Field()
+    docScore = scrapy.Field()
     docImage= scrapy.Field()
+    docType=scrapy.Field()
+
+class CommentItem(scrapy.Item):
+
+    photo=scrapy.Field()
+    name=scrapy.Field()
+    disease=scrapy.Field()
+    waitTime=scrapy.Field()
+    service=scrapy.Field()
+    doctor=scrapy.Field()
+    time=scrapy.Field()
+    content=scrapy.Field()
+
 
 
 
