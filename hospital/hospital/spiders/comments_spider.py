@@ -66,7 +66,6 @@ class CommentSpider(scrapy.spiders.Spider):
 
     def parse(self, response):
 
-        # content=self.login(self.login_url)
         #登录
         driver = webdriver.Chrome()
         driver.get(self.login_url)
