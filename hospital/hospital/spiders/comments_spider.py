@@ -1,4 +1,5 @@
 #coding=utf-8
+import re
 
 import scrapy
 import time
@@ -16,6 +17,17 @@ class CommentSpider(scrapy.spiders.Spider):
     start_urls = ["http://www.guahao.com/commentslist/h-125336070937502000/1-0"]
     verifyCode=''
 
+    # this method is used to remove the \r\n\t character
+    def remove_char(self,item):
+        if item is not None:
+            pattern = re.compile("[\n\r\t]")
+            str = pattern.sub("", item.strip())
+            return str
+        else:
+            return item
+
+    # this method is used to jude whether the element with xpath exist or not
+
     def isExit(self,browser,xpath):
         try:
             browser.find_element_by_xpath(xpath)
@@ -27,19 +39,20 @@ class CommentSpider(scrapy.spiders.Spider):
 
         # next_page = Selector(page).xpath("//a[@class='next J_pageNext_gh']").extract()
         next_page=self.isExit(driver, "//a[@class='next J_pageNext_gh']")
+
         if next_page:
 
             users = Selector(text=page).xpath("//ul[@id='comment-list']/li")
             for user in users:
                 item = CommentItem()
-                item['photo'] = user.xpath("div[@class='user']/img/@src").extract_first().strip()
-                item['name'] = user.xpath("div[@class='user']/p/text()").extract_first().strip()
-                item['disease'] = user.xpath("div[@class='row-1']/p[@class='disease']/span/text()").extract_first()
-                item['waitTime'] = user.xpath("div[@class='row-1']/p[@class='attitude']/strong/text()").extract_first()
-                item['service'] = user.xpath("div[@class='row-1']/p[@class='effect']/strong/text()").extract_first()
-                item['doctor'] = user.xpath("div[@class='row-2']/div[@class='info']/p//a[@class='name']/text()").extract_first()
-                item['time'] = user.xpath("div[@class='row-2']/div[@class='info']/p/span[1]/text()").extract_first()
-                item['content'] = user.xpath("div[@class='row-2']/div[@class='text']/span/text()").extract_first()
+                item['photo'] = self.remove_char(user.xpath("div[@class='user']/img/@src").extract_first())
+                item['name'] = self.remove_char(user.xpath("div[@class='user']/p/text()").extract_first())
+                item['disease'] = self.remove_char(user.xpath("div[@class='row-1']/p[@class='disease']/span/text()").extract_first())
+                item['waitTime'] = self.remove_char(user.xpath("div[@class='row-1']/p[@class='attitude']/strong/text()").extract_first())
+                item['service'] = self.remove_char(user.xpath("div[@class='row-1']/p[@class='effect']/strong/text()").extract_first())
+                item['doctor'] = self.remove_char(user.xpath("div[@class='row-2']/div[@class='info']/p//a[@class='name']/text()").extract_first())
+                item['time'] = self.remove_char(user.xpath("div[@class='row-2']/div[@class='info']/p/span[1]/text()").extract_first())
+                item['content'] = self.remove_char(user.xpath("div[@class='row-2']/div[@class='text']/span/text()").extract_first())
                 yield item
             driver.find_element_by_xpath("//a[@class='next J_pageNext_gh']").click()
             time.sleep(20)  # 设置时延以确保页面加载完
@@ -52,14 +65,14 @@ class CommentSpider(scrapy.spiders.Spider):
                 users = Selector(text=page).xpath("//ul[@id='comment-list']/li")
                 for user in users:
                     item = CommentItem()
-                    item['photo'] = user.xpath("div[@class='user']/img/@src").extract_first()
-                    item['name'] = user.xpath("div[@class='user']/p/text()").extract_first()
-                    item['disease'] = user.xpath("div[@class='row-1']/p[@class='disease']/span/text()").extract_first()
-                    item['waitTime'] = user.xpath("div[@class='row-1']/p[@class='attitude']/strong/text()").extract_first()
-                    item['service'] = user.xpath("div[@class='row-1']/p[@class='effect']/strong/text()").extract_first()
-                    item['doctor'] = user.xpath("div[@class='row-2']/div[@class='info']/p//a[@class='name']/text()").extract_first()
-                    item['time'] = user.xpath("div[@class='row-2']/div[@class='info']/p/span[1]/text()").extract_first()
-                    item['content'] = user.xpath("div[@class='row-2']/div[@class='text']/span/text()").extract_first()
+                    item['photo'] = self.remove_char(user.xpath("div[@class='user']/img/@src").extract_first())
+                    item['name'] = self.remove_char(user.xpath("div[@class='user']/p/text()").extract_first())
+                    item['disease'] = self.remove_char( user.xpath("div[@class='row-1']/p[@class='disease']/span/text()").extract_first())
+                    item['waitTime'] = self.remove_char(user.xpath("div[@class='row-1']/p[@class='attitude']/strong/text()").extract_first())
+                    item['service'] = self.remove_char(user.xpath("div[@class='row-1']/p[@class='effect']/strong/text()").extract_first())
+                    item['doctor'] = self.remove_char(user.xpath("div[@class='row-2']/div[@class='info']/p//a[@class='name']/text()").extract_first())
+                    item['time'] = self.remove_char(user.xpath("div[@class='row-2']/div[@class='info']/p/span[1]/text()").extract_first())
+                    item['content'] = self.remove_char(user.xpath("div[@class='row-2']/div[@class='text']/span/text()").extract_first())
                     yield item
             driver.save_screenshot("over.jpg") #截图以查看最后结果是否是正常退出
             return

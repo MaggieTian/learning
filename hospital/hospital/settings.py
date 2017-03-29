@@ -21,6 +21,14 @@ HTTPERROR_ALLOWED_CODES = [302] #返回302时,按正常返回对待,可以正常
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'hospital (+http://www.yourdomain.com)'
 
+# the setting of connectint  mongo db
+MONGO_HOST = "127.0.0.1"  # 主机IP
+MONGO_PORT = 27017  # 端口号
+MONGO_DB = "hospital"  # 库名
+MONGO_COLL = "comment"  # collection名
+MONGO_COLL1="doctor"
+MONGO_COLL2="dept"
+
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
@@ -68,8 +76,8 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'hospital.pipelines.HospitalPipeline': 300
-   #  'hospital.pipelines.DoctorPipeline':800
+   'hospital.pipelines.HospitalPipeline': 800,
+    'hospital.pipelines.DoctorPipeline': 300
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
